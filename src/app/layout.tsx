@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import HeaderWrapper from "./Components/HeaderWrapper"; // Import client component
 import { headers } from "next/headers"; // To get pathname on the server side
-
+import AuthProvider from "@/providers/AuthProvider";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +27,7 @@ export default  async function RootLayout({
 }>) {
   const pathname = (await headers()).get("x-invoke-path") || ""; // Get pathname on the server side
   console.log(pathname);
-  const hideHeaderPaths = ["/Login", "/Sign-up", "/Password"];
+  const hideHeaderPaths = ["/login", "/Sign-up", "/Password"];
   const shouldHideHeader = hideHeaderPaths.includes(pathname);
 
   return (
@@ -37,6 +37,7 @@ export default  async function RootLayout({
       <body suppressHydrationWarning= {true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AuthProvider>
         <div className="bg-gray-100 min-h-content">
         <HeaderWrapper /> {/* Conditionally renders Header */}
         {/* <Header/> */}
@@ -44,6 +45,7 @@ export default  async function RootLayout({
         <div>
           {children}
         </div>
+        </AuthProvider>
       </body>
     </html>
   );

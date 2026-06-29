@@ -1,45 +1,62 @@
 "use client"
 import Image from "next/image";
-import LoginForm from "../../Components/loginform";
+import LoginForm from "../../Components/Loginform";
 import Link from "next/link";
 import Logo from "@/app/Components/logo";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 export default () => {
-    const emailsetup = () =>{
-        console.log("Email submit");
-    }
+    const { login } = useAuth();
+
+    const router = useRouter();
+
+    const handleLogin = async (
+        email: string,
+        password: string
+    ) => {
+        try {
+            await login({
+                email,
+                password,
+            });
+
+            // router.push("/dashboard");
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
-        <div className="flex justify-center items-center w-9/12 m-auto md:w-full h-dvh">
-        <div className="flex justify-center flex-col items-center w-full h-full m-auto rounded-2xl">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+            <div className="w-full max-w-md rounded-2xl bg-gray-900 p-8 shadow-xl">
 
-            <Logo/>
+                <div className="mb-8 text-cente flex flex-col items-center">
+                    <Logo />
 
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center text-gray-400 text-xl p-4">Log - In</div>
+                    <h1 className="mt-4 text-3xl font-bold text-white">
+                        Welcome Back
+                    </h1>
 
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center flex justify-center"> 
-                <button className="bg-white text-black flex justify-center gap-x-2 mx-5 my-3 p-2 w-full font-semibold rounded-md hover:bg-gray-200">
-                    <Image src="/google-color-svgrepo-com.svg" width={25} height={25} alt="" />
-                    Continue with Google
-                </button>
+                    <p className="mt-2 text-gray-400">
+                        Sign in to continue to
+                        FinanceTracker
+                    </p>
+                </div>
+
+                <LoginForm
+                    onSubmit={handleLogin}
+                />
+
+                <p className="mt-6 text-center text-gray-400">
+                    Don't have an account?
+                    <Link
+                        href="/Sign-up"
+                        className="ml-1 text-blue-400"
+                    >
+                        Sign Up
+                    </Link>
+                </p>
+
             </div>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 flex items-center px-4 mx-4 ">
-                <hr className="flex-grow border-gray-600" />
-                <span className="mx-3 text-gray-400">OR</span>
-                <hr className="flex-grow border-gray-600" />
-            </div>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 p-4">
-                <LoginForm onSubmit={emailsetup}/>
-            </div>
-
-            <p className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center text-gray-400 p-4 rounded-b-2xl">
-                Don't have an account?{" "}
-                <Link href="/Sign-up" className="text-blue-400 hover:underline">
-                    Sign up
-                </Link>
-            </p>
-
-        </div>
         </div>
     );
 }

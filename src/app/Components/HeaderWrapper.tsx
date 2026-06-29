@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 export default function HeaderWrapper() {
     const pathname = usePathname();
-    const hideHeaderPaths = ["/Login", "/Sign-up", "/Password"];
+    const hideHeaderPaths = ["/login", "/Sign-up", "/Password"];
 
     return hideHeaderPaths.includes(pathname) ? null : <Header />;
 }

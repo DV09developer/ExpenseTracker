@@ -1,27 +1,119 @@
-"use client"
-import { Dispatch, SetStateAction, useState } from "react";
-export default function loginform(props: { onSubmit: (email: string) => void; }
-    // {onSubmit: (email: string) => void;}
-) {
-        const [email, setEmail] = useState("");
+"use client";
 
-    return (
-        <div>
-            <input
-                type="email"
-                id="email"
-                placeholder="name@work-email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 mb-3 rounded-md bg-gray-900 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
-            {/* Continue with Email Button */}
-            <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 rounded-md font-semibold" onClick={() => props.onSubmit(email)}>
-                Continue with email
-            </button>
+interface LoginFormProps {
+  onSubmit: (
+    email: string,
+    password: string
+  ) => Promise<void>;
+}
 
-            
+export default function LoginForm({
+  onSubmit,
+}: LoginFormProps) {
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      await onSubmit(
+        email,
+        password
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5"
+    >
+      <div>
+        <label className="block mb-2 text-sm text-gray-300">
+          Email
+        </label>
+
+        <input
+          type="email"
+          placeholder="name@example.com"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block mb-2 text-sm text-gray-300">
+          Password
+        </label>
+
+        <div className="relative">
+          <input
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 pr-12 text-white focus:border-blue-500 focus:outline-none"
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword(
+                !showPassword
+              )
+            }
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+          >
+            {showPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
+          </button>
         </div>
-    );
-};
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+      >
+        {loading
+          ? "Signing In..."
+          : "Sign In"}
+      </button>
+    </form>
+  );
+}

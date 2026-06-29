@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import LoginForm from "../../Components/loginform";
+import LoginForm from "../../Components/Loginform";
 import Link from "next/link";
 import pb from "../../../../pocketbase";
 import { sendOTP } from "@/app/utils/send-otp";
