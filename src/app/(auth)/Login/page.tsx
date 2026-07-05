@@ -1,62 +1,60 @@
-"use client"
-import Image from "next/image";
+"use client";
+
 import LoginForm from "../../Components/Loginform";
 import Link from "next/link";
 import Logo from "@/app/Components/logo";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-export default () => {
-    const { login } = useAuth();
+import { useState } from "react";
+import { AlertCircle } from "lucide-react";
 
-    const router = useRouter();
+export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = async (
-        email: string,
-        password: string
-    ) => {
-        try {
-            await login({
-                email,
-                password,
-            });
+  const handleLogin = async (email: string, password: string) => {
+    setError(null);
+    try {
+      await login({ email, password });
+      router.push("/User");
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.response?.data?.message || "Invalid credentials. Please try again.");
+    }
+  };
 
-            // router.push("/dashboard");
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-            <div className="w-full max-w-md rounded-2xl bg-gray-900 p-8 shadow-xl">
-
-                <div className="mb-8 text-cente flex flex-col items-center">
-                    <Logo />
-
-                    <h1 className="mt-4 text-3xl font-bold text-white">
-                        Welcome Back
-                    </h1>
-
-                    <p className="mt-2 text-gray-400">
-                        Sign in to continue to
-                        FinanceTracker
-                    </p>
-                </div>
-
-                <LoginForm
-                    onSubmit={handleLogin}
-                />
-
-                <p className="mt-6 text-center text-gray-400">
-                    Don't have an account?
-                    <Link
-                        href="/Sign-up"
-                        className="ml-1 text-blue-400"
-                    >
-                        Sign Up
-                    </Link>
-                </p>
-
-            </div>
+  return (
+    <div className="min-h-[85vh] flex items-center justify-center p-4">
+      <div className="w-full max-w-md rounded-3xl glass-card p-8 md:p-10 shadow-2xl border border-white/5 flex flex-col items-center">
+        <div className="mb-8 text-center flex flex-col items-center">
+          <Logo />
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
+            Welcome Back
+          </h1>
+          <p className="mt-2 text-sm text-gray-400">
+            Sign in to continue to WealthFlow
+          </p>
         </div>
-    );
+
+        {error && (
+          <div className="w-full mb-6 flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <div className="w-full">
+          <LoginForm onSubmit={handleLogin} />
+        </div>
+
+        <p className="mt-8 text-center text-sm text-gray-400">
+          Don't have an account?
+          <Link href="/Sign-up" className="ml-1 font-bold text-cyan-400 hover:text-cyan-300 transition">
+            Sign Up
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }

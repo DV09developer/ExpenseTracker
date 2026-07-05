@@ -1,14 +1,14 @@
-export type TransactionType =
-  | "income"
-  | "expense";
+export type TransactionType = "income" | "expense";
 
 export interface Transaction {
   _id: string;
-  type: TransactionType;
+  userId: string;
+  expense_type: TransactionType;
+  expense_title: string;
   amount: number;
   category: string;
   description?: string;
-  date: string;
+  transactionDate: string;
   createdAt: string;
   updatedAt: string;
 }

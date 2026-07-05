@@ -1,87 +1,163 @@
-"use client"
-import Image from "next/image";
-import LoginForm from "../../Components/Loginform";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import pb from "../../../../pocketbase";
-import { sendOTP } from "@/app/utils/send-otp";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import Logo from "@/app/Components/logo";
+import { Eye, EyeOff, AlertCircle } from "lucide-react";
 
-// import { useState } from "react";
+export default function SignUpPage() {
+  const { register } = useAuth();
+  const router = useRouter();
 
-export default () => {
-    console.log("Passing storemail function:", storemail);
-    console.log("This is login form");
-    const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
 
-    async function  storemail (email: string){
-        console.log("Props in Parent:", { onSubmit: storemail });
-        try{
-            console.log(email);
-            const data = {
-                "User_email": email,
-                "Password": ""
-            };
-            try{
-                const records = await pb.collection('User').getFirstListItem(`User_email = '${email}'`);
-                if(records){
-                    console.log("You already have an account");
-                }
-            } catch (err) {
-                const record = await pb.collection('User').create(data);
-                console.log(record)
-                localStorage.setItem('email', email);
-                console.log("record created" , record);
-                try{
-                    console.log("🚀 Calling sendOTP...");
-                    "use server"
-                    const response = await sendOTP(email);
-                    console.log("🏁 sendOTP function finished.", response);
-                    router.push(`/otp-auth?email=${email}`);
-                }
-                catch{
-                    console.log("Error on sendOTP");
-                }
-            }
-        } catch(err){
-            console.log(err);
-        }
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      await register({
+        username: username.toLowerCase().trim(),
+        email: email.trim(),
+        password,
+        firstname: firstname.trim(),
+        lastname: lastname.trim(),
+      });
+      router.push("/User");
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.response?.data?.message || "Registration failed. Please check inputs.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return (
-        <div className="flex justify-center items-center w-9/12 m-auto md:w-full h-dvh">
-        <div className="flex justify-center flex-col items-center w-full h-full m-auto rounded-2xl">
-
-            <Logo/>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center text-gray-400 text-xl p-4">Sign - Up</div>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center flex justify-center"> 
-                <button className="bg-white text-black flex justify-center gap-x-2 mx-5 my-3 p-2 w-full font-semibold rounded-md hover:bg-gray-200">
-                    <Image src="/google-color-svgrepo-com.svg" width={25} height={25} alt="" />
-                    Continue with Google
-                </button>
-            </div>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 flex items-center px-4 mx-4 ">
-                <hr className="flex-grow border-gray-600" />
-                <span className="mx-3 text-gray-400">OR</span>
-                <hr className="flex-grow border-gray-600" />
-            </div>
-
-            <div className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 p-4">
-                <LoginForm onSubmit={storemail} />
-            </div>
-
-            <p className="lg:w-1/4 md:w-3/5 w-full bg-gray-900 text-center text-gray-400 p-4 rounded-b-2xl">
-                Already have an account?{" "}
-                <Link href="/Login" className="text-blue-400 hover:underline">
-                    Log in
-                </Link>
-            </p>
-            {/* <Image src="@/public/logo.webp" alt="EX Logo" width={100} height={100} /> */}
-
+  return (
+    <div className="min-h-[85vh] flex items-center justify-center p-4">
+      <div className="w-full max-w-md rounded-3xl glass-card p-8 md:p-10 shadow-2xl border border-white/5 flex flex-col items-center">
+        <div className="mb-6 text-center flex flex-col items-center">
+          <Logo />
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
+            Create Account
+          </h1>
+          <p className="mt-2 text-sm text-gray-400">
+            Sign up to start tracking your expenses
+          </p>
         </div>
-        </div>
-    );
+
+        {error && (
+          <div className="w-full mb-6 flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl animate-fade-in">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="w-full space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block mb-1.5 text-xs font-semibold text-gray-300">
+                First Name
+              </label>
+              <input
+                type="text"
+                placeholder="John"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label className="block mb-1.5 text-xs font-semibold text-gray-300">
+                Last Name
+              </label>
+              <input
+                type="text"
+                placeholder="Doe"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+                className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-gray-300">
+              Username *
+            </label>
+            <input
+              type="text"
+              placeholder="johndoe"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-gray-300">
+              Email Address *
+            </label>
+            <input
+              type="email"
+              placeholder="john@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-gray-300">
+              Password *
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Min. 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 pr-10 text-sm text-white focus:border-cyan-500 focus:outline-none transition"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 py-3 font-bold text-white transition shadow-lg shadow-indigo-500/25 disabled:opacity-50 mt-4 cursor-pointer"
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-400">
+          Already have an account?
+          <Link href="/login" className="ml-1 font-bold text-cyan-400 hover:text-cyan-300 transition">
+            Sign In
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }

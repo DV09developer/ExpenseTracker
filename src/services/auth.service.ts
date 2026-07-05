@@ -1,18 +1,11 @@
 import { api } from "@/lib/api";
+import { LoginPayload, RegisterPayload } from "@/types/auth";
 
 export const authService = {
-  login: (data: {
-    email: string;
-    password: string;
-  }) =>
+  login: (data: LoginPayload) =>
     api.post("/api/users/login", data),
 
-  register: (data: {
-    username: string;
-    email: string;
-    password: string;
-    fullName?: string;
-  }) =>
+  register: (data: RegisterPayload) =>
     api.post("/api/users/register", data),
 
   logout: () =>
