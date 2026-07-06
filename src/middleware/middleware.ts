@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
   );
 
   if (isProtectedRoute && !accessToken) {
-    return NextResponse.redirect(new URL("/Login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
