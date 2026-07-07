@@ -17,7 +17,7 @@ export default function LoginPage() {
     setError(null);
     try {
       await login({ email, password });
-      router.push("/User");
+      router.push("/overview");
     } catch (err: any) {
       console.error(err);
       setError(err?.response?.data?.message || "Invalid credentials. Please try again.");

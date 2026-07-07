@@ -22,7 +22,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full glass-card border-b border-white/5 py-4 px-6 md:px-12 flex justify-between items-center shadow-lg rounded-b-2xl">
       {/* Brand Logo */}
-      <Link href={user ? "/User" : "/"} className="flex items-center gap-2 text-xl font-bold tracking-tight text-white hover:opacity-90 transition">
+      <Link href={user ? "/overview" : "/"} className="flex items-center gap-2 text-xl font-bold tracking-tight text-white hover:opacity-90 transition">
         <div className="bg-gradient-to-tr from-indigo-500 to-cyan-400 p-2 rounded-xl text-white shadow-md shadow-indigo-500/20">
           <Wallet size={20} />
         </div>
@@ -32,9 +32,9 @@ export default function Header() {
       {/* Nav Links */}
       <nav className="hidden md:flex items-center gap-8">
         <Link 
-          href={user ? "/User" : "/"} 
+          href={user ? "/overview" : "/"} 
           className={`text-sm font-medium transition ${
-            pathname === "/" || pathname === "/User" ? "text-cyan-400 font-semibold" : "text-gray-300 hover:text-white"
+            pathname === "/" || pathname === "/overview" ? "text-cyan-400 font-semibold" : "text-gray-300 hover:text-white"
           }`}
         >
           {user ? "Dashboard" : "Home"}

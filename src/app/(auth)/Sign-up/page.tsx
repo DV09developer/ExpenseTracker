@@ -34,7 +34,7 @@ export default function SignUpPage() {
         firstname: firstname.trim(),
         lastname: lastname.trim(),
       });
-      router.push("/User");
+      router.push("/overview");
     } catch (err: any) {
       console.error(err);
       setError(err?.response?.data?.message || "Registration failed. Please check inputs.");

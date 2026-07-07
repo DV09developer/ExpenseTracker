@@ -32,7 +32,7 @@ export default function Home() {
       <div className="mt-10 flex flex-wrap justify-center gap-4">
         {user ? (
           <Link
-            href="/User"
+            href="/overview"
             className="flex items-center gap-2 text-base font-bold bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white px-8 py-3.5 rounded-2xl transition shadow-xl shadow-indigo-500/20"
           >
             <span>Go to Dashboard</span>
