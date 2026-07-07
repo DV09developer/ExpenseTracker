@@ -1,8 +1,8 @@
 "use client";
 
-import LoginForm from "../../Components/Loginform";
+import Loginform from "../Components/Loginform";
 import Link from "next/link";
-import Logo from "@/app/Components/logo";
+import Logo from "@/app/(auth)/Components/logo";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
@@ -45,7 +45,7 @@ export default function LoginPage() {
         )}
 
         <div className="w-full">
-          <LoginForm onSubmit={handleLogin} />
+          <Loginform onSubmit={handleLogin} />
         </div>
 
         <p className="mt-8 text-center text-sm text-gray-400">

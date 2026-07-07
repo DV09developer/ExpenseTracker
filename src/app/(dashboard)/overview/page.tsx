@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import ProtectedRoute from "../Components/auth/ProtectedRoute";
+import ProtectedRoute from "../../(auth)/Components/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 import { transactionService as txService } from "@/services/transaction.service";
 import { Transaction, TransactionType } from "@/types/transaction";

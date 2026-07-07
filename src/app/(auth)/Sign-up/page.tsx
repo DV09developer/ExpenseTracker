@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import Logo from "@/app/Components/logo";
+import Logo from "@/app/(auth)/Components/logo";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export default function SignUpPage() {

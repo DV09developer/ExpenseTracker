@@ -107,7 +107,7 @@ export default function Expense() {
                     <div key={expense.Cost} className="p-3 border rounded bg-gray-900 text-white">
                         <h2 className="text-lg font-semibold">📌 Expense Summary:</h2>
                         <p className="text-lg">📝 Type: {expense.ExpenseType}</p>
-                        <p className="text-lg">💲 Cost: ₹{expense.Cost}</p>
+                        <p className="text-lg">💰  Cost: ₹{expense.Cost}</p>
                     </div>
                 ))}
             </div>

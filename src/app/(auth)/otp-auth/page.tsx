@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Logo from "@/app/Components/logo";
+import Logo from "@/app/(auth)/Components/logo";
 
 export default function OTPVerify() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function OTPVerify() {
           placeholder="Enter OTP code"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
-          className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition mb-4 text-center tracking-widest font-mono text-lg"
+          className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none transition mb-4 text-center tracking-widest font-mono"
         />
         <button 
           onClick={handleVerify}
