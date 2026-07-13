@@ -1,13 +1,16 @@
 import axios from "axios";
 
+// Create an Axios instance with default configuration
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  // Include credentials (cookies) in requests
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// Token refresh handling variables
 let isRefreshing = false;
 let failedQueue: {
   resolve: (value?: unknown) => void;
@@ -21,6 +24,7 @@ const processQueue = (error: unknown) => {
   failedQueue = [];
 };
 
+// Add a response interceptor to handle 401 errors and refresh tokens
 api.interceptors.response.use(
   (response) => response,
 
@@ -49,6 +53,7 @@ api.interceptors.response.use(
 
       isRefreshing = true;
 
+      // Attempt to refresh the token
       try {
         await api.post("/api/users/refresh-token");
         processQueue(null);

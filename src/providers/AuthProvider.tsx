@@ -20,12 +20,11 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] =
-    useState<User | null>(null);
+  // State to hold the current user and loading status
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
-
+  // Function to refresh the current user data
   const refreshUser = async () => {
     try {
       const response =
@@ -39,6 +38,7 @@ export default function AuthProvider({
     }
   };
 
+  // Function to handle user login
   const login = async (
     payload: LoginPayload
   ) => {
@@ -47,6 +47,7 @@ export default function AuthProvider({
     await refreshUser();
   };
 
+  // Function to handle user registration
   const register = async (
     payload: RegisterPayload
   ) => {
@@ -55,6 +56,7 @@ export default function AuthProvider({
     await refreshUser();
   };
 
+  // Function to handle user logout
   const logout = async () => {
     await authService.logout();
 
