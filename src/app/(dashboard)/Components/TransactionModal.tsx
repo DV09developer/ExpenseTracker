@@ -1,58 +1,74 @@
 "use client";
 
 import { AlertCircle, X } from "lucide-react";
-import { TransactionType } from "@/types/transaction";
+// import { TransactionType } from "@/types/transaction";
+import useTransactionForm from "../hooks/useTransactionForm";
 
 interface TransactionModalProps {
-    isOpen: boolean;
-    editing: boolean;
+    form: ReturnType<typeof useTransactionForm>;
+    // isOpen: boolean;
+    // editing: boolean;
 
-    formAmount: string;
-    formTitle: string;
-    formType: TransactionType;
-    formCategory: string;
-    formDescription: string;
-    formDate: string;
+    // formAmount: string;
+    // formTitle: string;
+    // formType: TransactionType;
+    // formCategory: string;
+    // formDescription: string;
+    // formDate: string;
 
-    formError: string | null;
-    submitting: boolean;
+    // formError: string | null;
+    // submitting: boolean;
 
-    setFormAmount: React.Dispatch<React.SetStateAction<string>>;
-    setFormTitle: React.Dispatch<React.SetStateAction<string>>;
-    setFormType: React.Dispatch<React.SetStateAction<TransactionType>>;
-    setFormCategory: React.Dispatch<React.SetStateAction<string>>;
-    setFormDescription: React.Dispatch<React.SetStateAction<string>>;
-    setFormDate: React.Dispatch<React.SetStateAction<string>>;
+    // setFormAmount: React.Dispatch<React.SetStateAction<string>>;
+    // setFormTitle: React.Dispatch<React.SetStateAction<string>>;
+    // setFormType: React.Dispatch<React.SetStateAction<TransactionType>>;
+    // setFormCategory: React.Dispatch<React.SetStateAction<string>>;
+    // setFormDescription: React.Dispatch<React.SetStateAction<string>>;
+    // setFormDate: React.Dispatch<React.SetStateAction<string>>;
 
-    onClose: () => void;
-    onSubmit: (e: React.FormEvent) => void;
+    // onClose: () => void;
+    // onSubmit: (e: React.FormEvent) => void;
 }
 
-export default function TransactionModal({
-    isOpen,
-    editing,
+export default function TransactionModal({ form }: TransactionModalProps) {
+    const {
 
-    formAmount,
-    formTitle,
-    formType,
-    formCategory,
-    formDescription,
-    formDate,
+        isModalOpen,
+        setIsModalOpen,
 
-    formError,
-    submitting,
+        editingTx,
+        setEditingTx,
 
-    setFormAmount,
-    setFormTitle,
-    setFormType,
-    setFormCategory,
-    setFormDescription,
-    setFormDate,
+        formAmount,
+        setFormAmount,
 
-    onClose,
-    onSubmit,
-}: TransactionModalProps) {
-    if (!isOpen) return null;
+        formTitle,
+        setFormTitle,
+
+        formType,
+        setFormType,
+
+        formCategory,
+        setFormCategory,
+
+        formDescription,
+        setFormDescription,
+
+        formDate,
+        setFormDate,
+
+        formError,
+        setFormError,
+
+        submitting,
+        setSubmitting,
+
+        handleStartEdit,
+        handleCloseModal,
+        handleSubmit
+    } = form;
+
+    if (!isModalOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
@@ -62,11 +78,11 @@ export default function TransactionModal({
                 <div className="flex items-center justify-between">
 
                     <h3 className="text-xl font-bold text-white">
-                        {editing ? "Edit Transaction" : "New Transaction"}
+                        {editingTx ? "Edit Transaction" : "New Transaction"}
                     </h3>
 
                     <button
-                        onClick={onClose}
+                        onClick={() => setIsModalOpen(false)}
                         className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/5"
                     >
                         <X size={20} />
@@ -85,7 +101,7 @@ export default function TransactionModal({
                 )}
 
                 <form
-                    onSubmit={onSubmit}
+                    onSubmit={handleSubmit}
                     className="space-y-4"
                 >
                     {/* Type */}
@@ -174,7 +190,7 @@ export default function TransactionModal({
 
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={() => setIsModalOpen(false)}
                             className="w-1/2 rounded-xl border border-white/10 py-3"
                         >
                             Cancel

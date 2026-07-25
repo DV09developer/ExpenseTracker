@@ -40,6 +40,7 @@ export default function AnalyticsCharts({
         "Dec",
     ];
 
+    // Category Aggregation for Doughnut Chart
     const doughnutData = {
         labels: categoryData.map((item) => item.category),
         datasets: [
@@ -60,6 +61,7 @@ export default function AnalyticsCharts({
         ],
     };
 
+    // Monthly expenses Bar Chart
     const barData = {
         labels: monthlyData.map(
             (item) => `${monthNames[item.month]} ${item.year}`
