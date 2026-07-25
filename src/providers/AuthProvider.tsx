@@ -63,22 +63,22 @@ export default function AuthProvider({
     setUser(null);
   };
 
-//   useEffect(() => {
-//   const initializeAuth = async () => {
-//     try {
-//       const response =
-//         await authService.currentUser();
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        const response =
+          await authService.currentUser();
 
-//       setUser(response.data.data);
-//     } catch {
-//       setUser(null);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+        setUser(response.data.data);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-//   initializeAuth();
-// }, []);
+    initializeAuth();
+  }, []);
 
   return (
     <AuthContext.Provider

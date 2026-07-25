@@ -12,6 +12,7 @@ export default function ProtectedRoute({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  console.log("ProtectedRoute: user:", user, "loading:", loading);
 
   useEffect(() => {
     if (!loading && !user) {
