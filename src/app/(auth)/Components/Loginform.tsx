@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 interface LoginFormProps {
   onSubmit: (
@@ -13,17 +14,10 @@ interface LoginFormProps {
 export default function LoginForm({
   onSubmit,
 }: LoginFormProps) {
-  const [email, setEmail] =
-    useState("");
-
-  const [password, setPassword] =
-    useState("");
-
-  const [showPassword, setShowPassword] =
-    useState(false);
-
-  const [loading, setLoading] =
-    useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (
     e: React.FormEvent
@@ -32,11 +26,7 @@ export default function LoginForm({
 
     try {
       setLoading(true);
-
-      await onSubmit(
-        email,
-        password
-      );
+      await onSubmit(email, password);
     } finally {
       setLoading(false);
     }
@@ -104,6 +94,15 @@ export default function LoginForm({
           </button>
         </div>
       </div>
+
+      <p>
+        <Link
+          href="/forgot-password"
+          className="text-sm text-blue-400 hover:underline cursor-pointer"
+        >
+          Forgot your password?
+        </Link>
+      </p>
 
       <button
         type="submit"

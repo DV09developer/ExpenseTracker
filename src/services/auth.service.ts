@@ -13,4 +13,13 @@ export const authService = {
 
   currentUser: () =>
     api.get("/api/users/profile"),
+
+  forgotPassword: (email: string) =>
+    api.post("/api/users/forgot-password", { email }),
+
+  verifyOTP: (otp: string) =>
+    api.post("/api/users/verify-otp", { otp }),
+
+  resetPassword: (token: string, newPassword: string) =>
+    api.post(`/api/users/reset-password/${token}`, { newPassword }),
 };

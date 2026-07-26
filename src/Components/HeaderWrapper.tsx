@@ -5,7 +5,7 @@ import Header from "./Header";
 // HeaderWrapper component that conditionally renders the Header based on the current pathname
 export default function HeaderWrapper() {
     const pathname = usePathname();
-    const hideHeaderPaths = ["/login", "/Sign-up", "/Password"];
+    const hideHeaderPaths = ["/login", "/Sign-up", "/Password", "/forgot-password", "/enter-otp", "/reset-password"];
 
     return hideHeaderPaths.includes(pathname) ? null : <Header />;
 }
