@@ -17,8 +17,8 @@ export const authService = {
   forgotPassword: (email: string) =>
     api.post("/api/users/forgot-password", { email }),
 
-  verifyOTP: (otp: string) =>
-    api.post("/api/users/verify-otp", { otp }),
+  verifyOTP: (email: string, otp: string) =>
+    api.post("/api/users/verify-otp", { email, otp }),
 
   resetPassword: (token: string, newPassword: string) =>
     api.post(`/api/users/reset-password/${token}`, { newPassword }),

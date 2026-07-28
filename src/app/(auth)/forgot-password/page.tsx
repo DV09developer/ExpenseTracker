@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { authService } from "@/services/auth.service";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
+    const {email, setEmail} = useAuth();
     const [error, setError] = useState<string | null>(null);
-    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {

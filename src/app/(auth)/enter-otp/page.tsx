@@ -1,27 +1,47 @@
 "use client";
-
-import Link from "next/link";
+const OTP_LENGTH = 6;
+// import Link from "next/link";
 import Logo from "@/app/(auth)/Components/logo";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { authService } from "@/services/auth.service";
+import axios from "axios";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
+    const { email } = useAuth();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
-        setError(null);
+        if (loading) return;    
+        setErrorMessage(null);
+        if (!otp.trim()) {
+            setErrorMessage("Please enter the OTP.");
+            return;
+        }
+
+        if (otp.length !== OTP_LENGTH) {
+            setErrorMessage(`OTP must be ${OTP_LENGTH} digits.`);
+            return;
+        }
         setLoading(true);
         try {
-            const verifyotp = await authService.verifyOTP(otp);
-            router.push("/enter-otp");
-        } catch (err: any) {
-            console.error(err);
-            setError(err?.response?.data?.message || "Invalid credentials. Please try again.");
+            const verifyotp = await authService.verifyOTP(email, otp);
+            console.log(verifyotp);
+            router.push("/reset-password");
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setErrorMessage(
+                    err.response?.data?.message ??
+                    "Invalid OTP."
+                );
+            } else {
+                setErrorMessage("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -33,33 +53,41 @@ export default function ForgotPasswordPage() {
                 <div className="mb-8 text-center flex flex-col items-center">
                     <Logo />
                     <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
-                        Forgot Your Password?
+                        Enter OTP
                     </h1>
                     <p className="mt-2 text-sm text-gray-400">
-                        Please enter your email address to receive a password reset link.
+                        OTP will expire in 10 minutes.
                     </p>
                 </div>
 
-                {error && (
+                {errorMessage && (
                     <div className="w-full mb-6 flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl">
                         <AlertCircle size={16} />
-                        <span>{error}</span>
+                        <span>{errorMessage}</span>
                     </div>
                 )}
 
                 <div className="w-full space-y-5">
                     {/* <Loginform onSubmit={handleLogin} /> */}
                     <div>
-                        <label className="block mb-2 text-sm text-gray-300">
-                            Email
+                        <label htmlFor="otp" className="block mb-2 text-sm text-gray-300">
+                            OTP
                         </label>
 
                         <input
-                            type="string"
-                            placeholder="name@example.com"
+                            id="otp"
+                            type="text"
+                            autoFocus
+                            placeholder="xxxxxx"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            autoComplete="one-time-code"
+                            maxLength={OTP_LENGTH}
                             value={otp}
-                            onChange={(e) =>
-                                setOtp(e.target.value)
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, "");
+                                setOtp(value)
+                            }
                             }
                             className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
                             required
@@ -73,17 +101,11 @@ export default function ForgotPasswordPage() {
                         onClick={handleSubmit}
                     >
                         {loading
-                            ? "Verification running..."
+                            ? "Verifying OTP..."
                             : "Verify OTP"}
                     </button>
                 </div>
 
-                <p className="mt-8 text-center text-sm text-gray-400">
-                    Don't have an account?
-                    <Link href="/Sign-up" className="ml-1 font-bold text-cyan-400 hover:text-cyan-300 transition">
-                        Sign Up
-                    </Link>
-                </p>
             </div>
         </div>
     );

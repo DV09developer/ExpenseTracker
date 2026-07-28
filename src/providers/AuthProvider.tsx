@@ -21,6 +21,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   // State to hold the current user and loading status
+  const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -83,6 +84,8 @@ export default function AuthProvider({
   return (
     <AuthContext.Provider
       value={{
+        email,
+        setEmail,
         user,
         loading,
         login,

@@ -17,6 +17,8 @@ export interface RegisterPayload {
 }
 
 export interface AuthContextType {
+  email: string ;
+  setEmail: (email: string) => void;
   user: User | null;
   loading: boolean;
 
