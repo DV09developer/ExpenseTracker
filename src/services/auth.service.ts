@@ -20,6 +20,6 @@ export const authService = {
   verifyOTP: (email: string, otp: string) =>
     api.post("/api/users/verify-otp", { email, otp }),
 
-  resetPassword: (token: string, newPassword: string) =>
-    api.post(`/api/users/reset-password/${token}`, { newPassword }),
+  resetPassword: (email: string, resetToken: string | null, newPassword: string) =>
+    api.post(`/api/users/reset-password`, { email, resetToken, newPassword }),
 };
