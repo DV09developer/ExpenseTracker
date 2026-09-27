@@ -32,7 +32,7 @@ export default function ResetPasswordForm() {
         try {
             const verifyotp = await authService.resetPassword(email, token, newPassword);
             console.log(verifyotp);
-            router.push(`/reset-password?token=${verifyotp.data}`);
+            router.push(`/login`);
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 setErrorMessage(

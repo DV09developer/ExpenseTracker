@@ -32,7 +32,7 @@ export default function ForgotPasswordPage() {
         try {
             const verifyotp = await authService.verifyOTP(email, otp);
             console.log(verifyotp);
-            router.push(`/reset-password?token=${verifyotp.data}`);
+            router.push(`/reset-password?token=${verifyotp.data.data}`);
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 setErrorMessage(
